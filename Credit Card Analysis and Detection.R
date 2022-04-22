@@ -17,7 +17,7 @@ attach(credit_card)          # attaches the sheet to check
 numrows = nrow(credit_card)  # sets the conditions for n rows in matrix
 numrows
 
-numcols=ncol(credit_card)    # sets the conditions for n cols in matrix
+numcols = ncol(credit_card)    # sets the conditions for n cols in matrix
 numcols
 
 # Card Dummy
