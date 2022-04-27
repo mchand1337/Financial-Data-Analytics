@@ -203,9 +203,11 @@ hist(l_credit_card2_adults_df[,2:8])
 # Using variables 2 to 8 to determine which of the predictors influence the probability that an application is accepted. Using the summary function to print the results.
 
 
-attach(credit_card2_adults_df)                # credit card datasheet with dummies, no log functions, and subset without age < 18
+attach(credit_card2_adults_df)                   # credit card datasheet with dummies, no log functions, and subset without age < 18
 
-fit1=glm(card_dummy~I(log(reports+1))+income+age+owner_dummy+dependents+months+I(log(share)), family="binomial", data=credit_card2_adults_df) # logistic regression of requested variables using glm()
+fit1 = glm(card_dummy ~ I(log(reports+1)) + income + age + owner_dummy + dependents + months +      # logistic regression of requested variables using glm()
+           I(log(share)), family="binomial", data=credit_card2_adults_df)                        
+
 summary(fit1)         # summary of statistics
 
 
@@ -217,25 +219,25 @@ creditcard_fit = glm(card ~ I(log(reports+1)) + income + I(age > 18) + owner + d
 summary(creditcard_fit)
 coef(creditcard_fit)
 
-pred_creditcard=predict(creditcard_fit,type="response")       # uses the predict function to produce a set of predictions based on logistic fit
-head(pred_creditcard)                                         # checks the head of the predicted values
+pred_creditcard = predict(creditcard_fit,type="response")       # uses the predict function to produce a set of predictions based on logistic fit
+head(pred_creditcard)                                           # checks the head of the predicted values
 
-length(pred_creditcard)                                       # checks length of predicted values
-
-
-contrasts(card)                                               # The contrasts() function indicates that R has created a dummy variable with a 1 for card = Yes
+length(pred_creditcard)                                         # checks length of predicted values
 
 
-glm.pred.cc=rep("no",1312)                                    # The following command creates a vector of 1312 No elements
+contrasts(card)                                                 # The contrasts() function indicates that R has created a dummy variable with a 1 for card = Yes
 
 
-glm.pred.cc[pred_creditcard>.5]="yes"                         # The following command transforms all the elements with predicted probabilities of default greater than 0.5 from No to Yes
+glm.pred.cc = rep("no",1312)                                    # The following command creates a vector of 1312 No elements
+
+
+glm.pred.cc[pred_creditcard>.5] = "yes"                         # The following command transforms all the elements with predicted probabilities of default greater than 0.5 from No to Yes
 
 head(glm.pred.cc)
 
 head(credit_card$card)
 
-table(glm.pred.cc,card)                                       # confusion matrix in comparison to the original card data
+table(glm.pred.cc,card)                                         # confusion matrix in comparison to the original card data
 
 correct1 = 294 + 994
 incorrect1 = 1 + 23
@@ -244,7 +246,7 @@ total1 = correct1 + incorrect1
 correct_frac <- (correct1)/(total1)
 correct_frac
 
-mean(glm.pred.cc==card)                                       # compares the accuracy to the hard coded numbers
+mean(glm.pred.cc==card)                                          # compares the accuracy to the hard coded numbers
 
 
 # Now we fit the logistic regression model using a training data for observations 1 to 1000. 
@@ -257,7 +259,7 @@ class(credit_card_adults)                                      # attaching origi
 train=credit_card_adults[1:1000,]                              # sets up the train data set of credit card data
 test=credit_card_adults[1001:nrow(credit_card_adults),]        # sets up the test data set of credit card data
 
-glm.fit.cc=glm(card ~ I(log(reports+1)) + income + age + owner + dependents + months + I(log(share)), data=train, family=binomial)   #fit the train data (logistic)
+glm.fit.cc=glm(card ~ I(log(reports+1)) + income + age + owner + dependents + months + I(log(share)), data=train, family=binomial)   # fit the train data (logistic)
 summary(glm.fit.cc)          # summary of statistics of train data
 coef(glm.fit.cc)             # coeffecients of data to get an overview
 
