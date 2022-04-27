@@ -2,42 +2,42 @@
 ###########################################  * Data Wrangling and Formatting *  ##################################################################################################################################################
 ##################################################################################################################################################################################################################################
 
-# preload working directory for part 1
+# Preload working directory for part 1.
 
 setwd("C:/Users/Michael/OneDrive - Georgia State University/Desktop/FI4090/Data")       
 getwd()
 houseprices=read.csv("HousePrices.csv",header=TRUE)
 attach(houseprices)
 
-# First we transform all yes/no columns into categorical values of 0 and 1. 0 = no, 1 = yes
+# First, we transform all yes/no columns into categorical values of 0 and 1. 0 = no, 1 = yes.
 
-numrows = nrow(houseprices)  # sets the conditions for n rows in matrix
+numrows = nrow(houseprices)    # Sets the conditions for n rows in matrix.
 numrows
 
-numcols=ncol(houseprices)    # sets the conditions for n cols in matrix
+numcols = ncol(houseprices)    # Sets the conditions for n cols in matrix.
 numcols
 
 # driveway dummy
 
-driveway_dummy <- matrix(nrow=numrows,ncol=1)     # establishing a new col and row in matrix
-head(driveway_dummy)                              # analyzing how the variable displays
-head(driveway)                                    # comparing the original variable to new variable
+driveway_dummy <- matrix(nrow=numrows,ncol=1)     # Establishing a new col and row in matrix.
+head(driveway_dummy)                              # Analyzing how the variable displays.
+head(driveway)                                    # Comparing the original variable to new variable.
 
-for (i in 1:numrows)  # setting the for loop to iterate through numrowshua
+for (i in 1:numrows)  # setting the for loop to iterate through numrows.
 {
   
-  if (driveway[i]=='yes')  {            # If driveway is 'yes', we acknowledge the presence with a value of 1
+  if (driveway[i]=='yes')  {            # If driveway is 'yes', we acknowledge the presence with a value of 1.
     driveway_dummy[i,]=1
-  } else {                              # else 0 if not 'yes'
+  } else {                              # Else 0 if not 'yes'.
     driveway_dummy[i,]=0
   }
 }
 
-colnames(driveway_dummy)="driveway_dummy"  #putting the column name within the data frame
+colnames(driveway_dummy)="driveway_dummy"  # Putting the column name within the data frame.
 
 # WE REPEAT THIS THOUGHT PROCESS FOR GASHEAT, AIRCON, RECREATION, FULLBASE, AND PREFER
 
-#gasheat dummy
+# gasheat dummy
 
 gasheat_dummy <- matrix(nrow=numrows,ncol=1)
 head(gasheat_dummy)
@@ -55,7 +55,7 @@ for (i in 1:numrows)
 
 colnames(gasheat_dummy)="gasheat_dummy"
 
-#aircon dummy
+# aircon dummy
 
 aircon_dummy <- matrix(nrow=numrows,ncol=1)
 head(aircon_dummy)
@@ -73,7 +73,7 @@ for (i in 1:numrows)
 
 colnames(aircon_dummy)="aircon_dummy"
 
-#recreation dummy
+# recreation dummy
 
 recreation_dummy <- matrix(nrow=numrows,ncol=1)
 head(recreation_dummy)
@@ -91,7 +91,7 @@ for (i in 1:numrows)
 
 colnames(recreation_dummy)="recreation_dummy"
 
-#fullbase dummy
+# fullbase dummy
 
 fullbase_dummy <- matrix(nrow=numrows, ncol=1)
 head(fullbase_dummy)
@@ -109,7 +109,7 @@ for (i in 1:numrows)
 
 colnames(fullbase_dummy)="fullbase_dummy"
 
-#prefer dummy
+# prefer dummy
 
 prefer_dummy <- matrix(nrow=numrows, ncol=1)
 head(prefer_dummy)
@@ -127,27 +127,28 @@ for (i in 1:numrows)
 
 colnames(prefer_dummy)="prefer_dummy"
 
-#Combining the data into one dataframe
+# Combining the data into one dataframe
 
-houseprices2=cbind(price, lotsize, bedrooms, bathrooms, stories, driveway_dummy, gasheat_dummy, aircon_dummy, recreation_dummy, fullbase_dummy, prefer_dummy, garage) # binds the new dummy variables into the the data frame
+houseprices2 = cbind(price, lotsize, bedrooms, bathrooms, stories, driveway_dummy, gasheat_dummy, aircon_dummy, recreation_dummy,    # binds the new dummy variables into the the data frame.
+                     fullbase_dummy, prefer_dummy, garage) 
 
-houseprices2_df=as.data.frame(houseprices2)  #the data is not a true dataframe, it's still considered a matrix. This converts the matrix into a true dataframe.
-class(houseprices2_df)      #checking the class of the data
+houseprices2_df = as.data.frame(houseprices2)  # The data is not a true dataframe, it's still considered a matrix. This converts the matrix into a true dataframe.
+class(houseprices2_df)       # Checking the class of the data.
 
-attach(houseprices2_df)     #attaching data for ease of use
+attach(houseprices2_df)      # Attaching data for ease of use.
 
-install.packages("fBasics")  #install packages that will be used for analysis
+install.packages("fBasics")  # Install packages that will be used for analysis.
 install.packages("RSQLite")
 install.packages("sqldf")
 install.packages("scales")
 
-library("fBasics")           #load the packages from library
-library("RSQLite")           #SQL or Structured Query Language is great and easy library; sometimes useful
+library("fBasics")           # Load the packages from library.
+library("RSQLite")           # SQL or Structured Query Language is great and easy library; sometimes useful. Never used the package as part of the analyses, however, it can be useful for those who wish to polish or practice their SQL skills.
 library("sqldf")
-library(scales)             #loads a library/package
+library(scales)              # Loads a library/package.
 
 
-percent <- function(x, digits=2, format="f", ...) {                       #In some cases, we may need to provide a function to analyze the percent usage of a variable
+percent <- function(x, digits=2, format="f", ...) {                       # In some cases, we may need to provide a function to analyze the percent usage of a variable.
   paste0(formatC(x * 100, format = format, digits = digits, ...), "%")
 }
 
@@ -155,45 +156,45 @@ percent <- function(x, digits=2, format="f", ...) {                       #In so
 ###########################################  * Data Analysis of House Pricing*  ##############################################################################################################################################
 ##############################################################################################################################################################################################################################
 
-# Summary stat for all the variables in the HousePrices data
+# Summary stat for all the variables in the HousePrices data.
 
-summary(houseprices)   # summary statistic of the house prices without modifying the variables
+summary(houseprices)   # Summary of statistics for the house prices data without modifying the variables.
 
 
 # Percentage of houses in the data with Driveway, Gas-Heat and Air-conditioning present?  
 # We use the mean to calculate the percentage since the variables are either 1 to 0.
 
 
-percent_driveway = percent(mean(driveway_dummy))    # finds the percent of houses with driveways present
+percent_driveway = percent(mean(driveway_dummy))    # Finds the percent of houses with driveways present.
 
-percent_gasheat = percent(mean(gasheat_dummy))      # finds the percent of houses with gasheat present
+percent_gasheat = percent(mean(gasheat_dummy))      # Finds the percent of houses with gasheat present.
   
-percent_aircon = percent(mean(aircon_dummy))        # finds the percent of houses with aircon present
+percent_aircon = percent(mean(aircon_dummy))        # Finds the percent of houses with aircon present.
 
 
-percent_driveway        # check variable
+percent_driveway        # Check variable.
 
-percent_gasheat         # check variable
+percent_gasheat         # Check variable.
 
-percent_aircon          # check variable
+percent_aircon          # Check variable.
 
 
-# Construct a linear regression model that tests whether number of bedrooms influence house prices
-# we then provide a summary of statistics for the linear Regression model
+# Construct a linear regression model that tests whether number of bedrooms influence house prices.
+# We then provide a summary of statistics for the linear Regression model.
 
-lm.fit1=lm(price~bedrooms, data = houseprices2_df)  # calls the lm function to regress price and bedrooms
-summary(lm.fit1)                                    # summary statistics of the simple linear regression
+lm.fit1 = lm(price~bedrooms, data = houseprices2_df)  # Calls the lm() function to regress price and bedrooms.
+summary(lm.fit1)                                      # Summary of statistics for the simple linear regression model.
 
-plot(bedrooms,price)                                # plots the regression
+plot(bedrooms,price)                                  # Plots the regression.
 abline(lm.fit1,lwd=3,col="red")
 
 # Let's Establish the null hypothesis:
 # The null hypothesis would state there is no effect of bedrooms on house pricing. 
-# We establish the null to tell whether the variables have an important relationship in relaying whether
+# We establish the null to tell whether the variables have an important relationship in relaying whether.
 # a statistic occurred by chance or there was improper manipulation of the data.
 
 # Interpretting the coefficient of bedrooms in the model, we say:
-# The beta is positive, therefore we can assume that for each additional unit of bedroom increases the house price by 13270
+# The beta is positive, therefore we can assume that for each additional unit of bedroom increases the house price by 13270.
 
 # To infer the effect of number of bedrooms on house price, we look to draw the conclusion based on p-value. 
 
@@ -211,8 +212,10 @@ abline(lm.fit1,lwd=3,col="red")
 # and observe the effect on the house prices. We provide a summary of the regression model using summary() function. We perform a multiple
 # linear regression to lessen the "noise" in the previous simple regression.   
 
-lm.fit2 = lm( price ~ lotsize + bedrooms + bathrooms + stories + driveway_dummy + gasheat_dummy + aircon_dummy + recreation_dummy + fullbase_dummy + prefer_dummy + garage, data=houseprices2_df )
-summary(lm.fit2)
+lm.fit2 = lm( price ~ lotsize + bedrooms + bathrooms + stories + driveway_dummy + 
+             gasheat_dummy + aircon_dummy + recreation_dummy + fullbase_dummy + prefer_dummy + garage, data=houseprices2_df )
+
+summary( lm.fit2 )
 
 ##################################################################################################################################################################################################################################
 
@@ -257,7 +260,7 @@ for (i in 1:numrows2)
   }
 }
 
-colnames(gender_dummy)="gender_dummy"
+colnames(gender_dummy) = "gender_dummy"
 
 # Student dummy
 
@@ -275,7 +278,7 @@ for (i in 1:numrows2)
   }
 }
 
-colnames(student_dummy)="student_dummy"
+colnames(student_dummy) = "student_dummy"
 
 # Married dummy
 
@@ -293,7 +296,7 @@ for (i in 1:numrows2)
   }
 }
 
-colnames(married_dummy)="married_dummy"
+colnames(married_dummy) = "married_dummy"
 
 # Ethnicity dummy
 
@@ -311,11 +314,11 @@ for (i in 1:numrows2)
   }
 }
 
-colnames(ethnicity_dummy)="ethnicity_dummy"
+colnames(ethnicity_dummy) = "ethnicity_dummy"
 
-credit2=cbind(Income, Limit, Rating, Cards, Age, Education, gender_dummy, student_dummy, married_dummy, ethnicity_dummy, Balance)  #binds the newly formatted data columns into a whole new matrix
+credit2 = cbind(Income, Limit, Rating, Cards, Age, Education, gender_dummy, student_dummy, married_dummy, ethnicity_dummy, Balance)  # Binds the newly formatted data columns into a whole new matrix.
 
-credit2=as.data.frame(credit2)   # converts the formatted matrix into a data frame being able to display and utilize all the categorical variables.
+credit2 = as.data.frame(credit2)   # Converts the formatted matrix into a data frame being able to display and utilize all the categorical variables.
 class(credit2)
 
 
@@ -331,13 +334,13 @@ percent(mean(student_dummy))
 
 percent(mean(gender_dummy))
 
-# We construct a linear regression model as follows:
+# We construct a multi-linear regression model as follows:
 # Response variable: Credit Card Balance 
 # Predictors: Credit Rating, Student, Credit Rating * Student (interaction terms)   
 
 # Providing a summary of the model using summary() function.
 
-lm.fit4=lm( Balance ~ Rating + student_dummy + I(Rating*student_dummy))
+lm.fit4 = lm(Balance ~ Rating + student_dummy + I(Rating*student_dummy))
 summary(lm.fit4)
 
 
